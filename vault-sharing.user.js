@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bhaclash's Vault Sharing script
 // @namespace    bhaclash.vault-sharing
-// @version      2024-06-11_2
+// @version      2024-06-11_3
 // @description  Helps with tracking balances in a shared vault
 // @author       Bhaclash
 // @match        https://www.torn.com/properties.php
@@ -55,15 +55,17 @@
         }
 
         function calculateBalances() {
-            let ownBalance = ownStartingBalance;
-            let spouseBalance = spouseStartingBalance;
             let transactionData = readTransactionData();
             let startTimeAsDate = new Date(Date.parse(startTime + "Z"));
+            let lastTransactionDate = startTimeAsDate;
+            let ownBalance = ownStartingBalance;
+            let spouseBalance = spouseStartingBalance;
             let allRelevantTransactionsLoaded = Object.entries(transactionData).filter(e => e[1].datetime <= startTimeAsDate).length > 0;
             if (allRelevantTransactionsLoaded) {
                 let relevantTransactions = Object.entries(transactionData).filter(e => e[1].datetime > startTimeAsDate).sort((a, b) => a[1].datetime - b[1].datetime);
                 for (let [id, transaction] of relevantTransactions) {
                     let amount = parseInt(transaction.type == "Deposit" ? transaction.amount : -transaction.amount);
+                    lastTransactionDate = transaction.datetime;
                     if (transaction.name === playerName) {
                         ownBalance += amount;
                     }
@@ -71,7 +73,14 @@
                         spouseBalance += amount;
                     }
                 }
-                showBalances(ownBalance, spouseBalance);
+            }
+            return { allRelevantTransactionsLoaded, lastTransactionDate, ownBalance, spouseBalance };
+        }
+
+        function calculateAndShowBalances() {
+            result = calculateBalances();
+            if (result.allRelevantTransactionsLoaded) {
+                showBalances(result.ownBalance, result.spouseBalance);
             }
         }
 
@@ -85,7 +94,7 @@
         function handleSave() {
             saveSettings();
             ({ startTime, ownStartingBalance, spouseStartingBalance } = JSON.parse(localStorage.getItem(localStorageKey)));
-            calculateBalances();
+            calculateAndShowBalances();
         }
 
         // Settings
@@ -146,7 +155,7 @@
         let mutationConfig = { attributes: false, childList: true, subtree: false };
 
         let newTransactionsLoadedCallback = (mutationList, observer) => {
-            calculateBalances();
+            calculateAndShowBalances();
         };
 
         // Callback function to execute when properties-page-wrap gets populated
@@ -159,7 +168,7 @@
                             addUI();
                             let transactionList = node.querySelector(".vault-trans-wrap ul");
                             let transactionListObserver = new MutationObserver(newTransactionsLoadedCallback);
-                            calculateBalances();
+                            calculateAndShowBalances();
                             transactionListObserver.observe(transactionList, mutationConfig);
                         }
                     }
