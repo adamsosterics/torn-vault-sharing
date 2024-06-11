@@ -1,10 +1,12 @@
 // ==UserScript==
 // @name         Bhaclash's Vault Sharing script
 // @namespace    bhaclash.vault-sharing
-// @version      2024-06-01
+// @version      2024-06-11_1
 // @description  Helps with tracking balances in a shared vault
 // @author       Bhaclash
 // @match        https://www.torn.com/properties.php
+// @updateURL    https://github.com/adamsosterics/torn-vault-sharing/raw/main/vault-sharing.user.js
+// @downloadURL  https://github.com/adamsosterics/torn-vault-sharing/raw/main/vault-sharing.user.js
 // @grant        none
 // @run-at       document-end
 // ==/UserScript==
