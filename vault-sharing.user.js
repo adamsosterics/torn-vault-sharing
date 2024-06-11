@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bhaclash's Vault Sharing script
 // @namespace    bhaclash.vault-sharing
-// @version      2024-06-11_1
+// @version      2024-06-11_2
 // @description  Helps with tracking balances in a shared vault
 // @author       Bhaclash
 // @match        https://www.torn.com/properties.php
@@ -61,7 +61,7 @@
             let startTimeAsDate = new Date(Date.parse(startTime + "Z"));
             let allRelevantTransactionsLoaded = Object.entries(transactionData).filter(e => e[1].datetime <= startTimeAsDate).length > 0;
             if (allRelevantTransactionsLoaded) {
-                let relevantTransactions = Object.entries(transactionData).filter(e => e[1].datetime >= startTimeAsDate).sort((a, b) => a[1].datetime - b[1].datetime);
+                let relevantTransactions = Object.entries(transactionData).filter(e => e[1].datetime > startTimeAsDate).sort((a, b) => a[1].datetime - b[1].datetime);
                 for (let [id, transaction] of relevantTransactions) {
                     let amount = parseInt(transaction.type == "Deposit" ? transaction.amount : -transaction.amount);
                     if (transaction.name === playerName) {
