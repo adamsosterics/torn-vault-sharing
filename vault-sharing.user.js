@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bhaclash's Vault Sharing script
 // @namespace    bhaclash.vault-sharing
-// @version      3
+// @version      4
 // @description  Helps with tracking balances in a shared vault
 // @author       Bhaclash
 // @match        https://www.torn.com/properties.php
@@ -65,7 +65,7 @@
                 let relevantTransactions = Object.entries(transactionData).filter(e => e[1].datetime > startTimeAsDate).sort((a, b) => a[1].datetime - b[1].datetime);
                 for (let [id, transaction] of relevantTransactions) {
                     let amount = parseInt(transaction.type == "Deposit" ? transaction.amount : -transaction.amount);
-                    lastTransactionDate = transaction.datetime;
+                    lastTransactionDate = transaction.datetime.toISOString().slice(0, -1);
                     if (transaction.name === playerName) {
                         ownBalance += amount;
                     }
@@ -119,8 +119,19 @@
                         <div class="cont torn-divider">
                             <p class="m-top10 bold">Your current balance</p>
                         </div>
-                        <div class="cont torn-divider">
+                        <div class="cont">
                             <span id="vault-sharing-own-balance">Scroll more</span>
+                        </div>
+                        <div class="cont">
+                            <p class="m-top10 bold">Start date</p>
+                            <p>
+                                <input id="vault-sharing-start-time" type="datetime-local" value="${startTime}" />
+                                <span class="btn-wrap silver">
+                                    <span class="btn">
+                                        <input id="vault-sharing-save-settings" type="button" class="torn-btn" value="SAVE">
+                                    </span>
+                                </span>
+                            </p>
                         </div>
                     </div>
                     <div class="vault-cont right">
@@ -133,29 +144,20 @@
                         <div class="cont torn-divider">
                             <p class="m-top10 bold">Your spouse's current balance</p>
                         </div>
-                        <div class="cont torn-divider">
+                        <div class="cont">
                             <span id="vault-sharing-spouse-balance">Scroll more</span>
                         </div>
-                    </div>
-                    <div class="vault-cont left torn-divider">
-                        <div class="title">
-                            <p class="m-top10 bold">Start date</p>
+                        <div class="cont">
+                            <p class="m-top10">Sets the starting balances and the start date to the current values so you don't have to scroll next time</p>
                             <p>
-                                <input id="vault-sharing-start-time" type="datetime-local" value="${startTime}" />
                                 <span class="btn-wrap silver">
                                     <span class="btn">
-                                        <input id="vault-sharing-save-settings" type="button" class="torn-btn" value="SAVE">
+                                        <input id="vault-sharing-update-settings" type="button" class="torn-btn" value="SET TO CURRENT">
                                     </span>
                                 </span>
                             </p>
                         </div>
                     </div>
-                    <div class="vault-cont right torn-divider">
-                        <span class="btn-wrap silver">
-                            <span class="btn">
-                                <input id="vault-sharing-update-settings" type="button" class="torn-btn" value="SET TO CURRENT">
-                            </span>
-                        </span>
                     <div class="clear"></div>
                 </div>
                 <hr class="delimiter-999 m-bottom10 m-top10">
