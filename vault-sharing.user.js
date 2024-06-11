@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bhaclash's Vault Sharing script
 // @namespace    bhaclash.vault-sharing
-// @version      2
+// @version      3
 // @description  Helps with tracking balances in a shared vault
 // @author       Bhaclash
 // @match        https://www.torn.com/properties.php
@@ -97,6 +97,13 @@
             calculateAndShowBalances();
         }
 
+        function handleUpdate() {
+            let result = calculateBalances();
+            document.getElementById("vault-sharing-own-start-balance").value = result.ownBalance;
+            document.getElementById("vault-sharing-spouse-start-balance").value = result.spouseBalance;
+            document.getElementById("vault-sharing-start-time").value = result.lastTransactionDate;
+        }
+
         // Settings
         function addUI() {
             let html = `
@@ -143,12 +150,19 @@
                             </p>
                         </div>
                     </div>
+                    <div class="vault-cont right torn-divider">
+                        <span class="btn-wrap silver">
+                            <span class="btn">
+                                <input id="vault-sharing-update-settings" type="button" class="torn-btn" value="SET TO CURRENT">
+                            </span>
+                        </span>
                     <div class="clear"></div>
                 </div>
                 <hr class="delimiter-999 m-bottom10 m-top10">
             `;
             document.querySelector(".vault-trans-wrap").insertAdjacentHTML("beforebegin", html);
             document.getElementById("vault-sharing-save-settings").addEventListener("click", handleSave);
+            document.getElementById("vault-sharing-update-settings").addEventListener("click", handleUpdate);
         }
 
         // Wiring
