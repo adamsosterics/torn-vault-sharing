@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bhaclash's Vault Sharing script
 // @namespace    bhaclash.vault-sharing
-// @version      5
+// @version      6
 // @description  Helps with tracking balances in a shared vault
 // @author       Bhaclash
 // @match        https://www.torn.com/properties.php
@@ -194,7 +194,6 @@
                 if (mutation.type === "childList") {
                     for (let node of mutation.addedNodes) {
                         if (node.nodeName === "DIV" && node.classList.contains("property-option")) {
-                            observer.disconnect();
                             addUI();
                             let transactionList = node.querySelector(".vault-trans-wrap ul");
                             let transactionListObserver = new MutationObserver(newTransactionsLoadedCallback);
