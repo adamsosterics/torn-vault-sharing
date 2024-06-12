@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bhaclash's Vault Sharing script
 // @namespace    bhaclash.vault-sharing
-// @version      6
+// @version      7
 // @description  Helps with tracking balances in a shared vault
 // @author       Bhaclash
 // @match        https://www.torn.com/properties.php
@@ -195,9 +195,9 @@
                     for (let node of mutation.addedNodes) {
                         if (node.nodeName === "DIV" && node.classList.contains("property-option")) {
                             addUI();
+                            calculateAndShowBalances();
                             let transactionList = node.querySelector(".vault-trans-wrap ul");
                             let transactionListObserver = new MutationObserver(newTransactionsLoadedCallback);
-                            calculateAndShowBalances();
                             transactionListObserver.observe(transactionList, mutationConfig);
                         }
                     }
@@ -205,8 +205,17 @@
             }
         };
 
-        let initialObserver = new MutationObserver(initialCallback);
-        let targetNode = document.getElementById("properties-page-wrap");
-        initialObserver.observe(targetNode, mutationConfig);
+        let pageObserver = new MutationObserver(initialCallback);
+        let page = document.getElementById("properties-page-wrap");
+        pageObserver.observe(page, mutationConfig);
+
+        let vaultTransactionsDiv = document.querySelector(".vault-trans-wrap");
+        if (vaultTransactionsDiv !== undefined) {
+            addUI();
+            calculateAndShowBalances();
+            let transactionList = document.querySelector(".vault-trans-wrap ul");
+            let transactionListObserver = new MutationObserver(newTransactionsLoadedCallback);
+            transactionListObserver.observe(transactionList, mutationConfig);
+        }
     };
 })();
