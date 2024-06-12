@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bhaclash's Vault Sharing script
 // @namespace    bhaclash.vault-sharing
-// @version      4
+// @version      5
 // @description  Helps with tracking balances in a shared vault
 // @author       Bhaclash
 // @match        https://www.torn.com/properties.php
@@ -15,7 +15,21 @@
     'use strict';
     let localStorageKey = "bh:vault_sharing:settings";
 
+    window.addEventListener(
+        "hashchange",
+        (event) => {
+            if (event.newURL.indexOf("vault") > -1) {
+                startVaultSharing();
+            };
+        },
+        false,
+    );
+
     if (window.location.href.indexOf("vault") > -1) {
+        startVaultSharing();
+    };
+
+    function startVaultSharing() {
         let playerName = JSON.parse(document.querySelector("#websocketConnectionData").innerText).playername;
         let { startTime, ownStartingBalance, spouseStartingBalance } = JSON.parse(localStorage.getItem(localStorageKey)) || { startTime: "2023-08-17T14:02", ownStartingBalance: 0, spouseStartingBalance: 0 };
 
@@ -195,5 +209,5 @@
         let initialObserver = new MutationObserver(initialCallback);
         let targetNode = document.getElementById("properties-page-wrap");
         initialObserver.observe(targetNode, mutationConfig);
-    }
+    };
 })();
