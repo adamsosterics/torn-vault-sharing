@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bhaclash's Vault Sharing script
 // @namespace    bhaclash.vault-sharing
-// @version      8
+// @version      9
 // @description  Helps with tracking balances in a shared vault
 // @author       Bhaclash
 // @match        https://www.torn.com/properties.php
@@ -39,7 +39,7 @@
             let datetime = new Date(Date.parse(`20${date[2]}-${date[1]}-${date[0]}T${time}Z`));
             let userLink = transactionItem.querySelector(".user.name");
             let userId = parseInt(userLink.href.split("XID=")[1]);
-            let name = userLink.children[0].title.split(" ")[0];
+            let name = userLink.title.split(" ")[0];
             let type = transactionItem.querySelector(".type").innerText.replace(/[^A-z]/g, "");
             let amount = transactionItem.querySelector(".amount").innerText.replace(/[^0-9]/g, "");
             let balance = transactionItem.querySelector(".balance").innerText.replace(/[^0-9]/g, "");
