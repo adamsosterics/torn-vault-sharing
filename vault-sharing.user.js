@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bhaclash's Vault Sharing script
 // @namespace    bhaclash.vault-sharing
-// @version      10
+// @version      11
 // @description  Helps with tracking balances in a shared vault
 // @author       Bhaclash
 // @match        https://www.torn.com/properties.php
@@ -175,8 +175,8 @@
             document.querySelector(".vault-trans-wrap").insertAdjacentHTML("beforebegin", html);
             document.getElementById("vault-sharing-save-settings").addEventListener("click", handleSave);
             document.getElementById("vault-sharing-update-settings").addEventListener("click", handleUpdate);
-            $('input[id="vault-sharing-own-start-balance"]').tornInputMoney({skipBlurCheck: true});
-            $('input[id="vault-sharing-spouse-start-balance"]').tornInputMoney({skipBlurCheck: true});
+            $('input[id="vault-sharing-own-start-balance"]').tornInputMoney({buttonElement: null, skipBlurCheck: true});
+            $('input[id="vault-sharing-spouse-start-balance"]').tornInputMoney({buttonElement: null, skipBlurCheck: true});
         }
 
         // Wiring
